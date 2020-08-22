@@ -1,0 +1,21 @@
+.team-heading {
+    background: rgb(190, 117, 117);
+}
+
+.text-center {
+    color: white;
+}
+
+.card-header {
+    background: rgb(115, 115, 202);
+}
+.card-body {
+    background: rgb(179, 172, 172);
+    box-shadow: 5px;
+}
+
+.team-area {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}

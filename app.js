@@ -5,10 +5,111 @@ const inquirer = require("inquirer");
 const path = require("path");
 const fs = require("fs");
 
+const roleChoice = [{message: 'What is the role of the team member ?',name: 'role', type: 'list', choices: ['Engineer', 'Intern', 'Manager', 'Done', 'Exit Program']}]
+
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
+var questions; 
+var func;
+var employees = [];
+var done = false;
+
+const questionnaireEng = [
+    {message: 'What is the name ?',name: 'name', type: 'input'},
+    {message: 'What is the id ?',name: 'id', type: 'input'},
+    {message: 'What is the email address ?',name: 'email_address', type: 'input'},
+    {message: 'What is the github username ?',name: 'role_specific', type: 'input'},
+];
+
+const questionnaireIntern = [
+    {message: 'What is the name ?',name: 'name', type: 'input'},
+    {message: 'What is the id ?',name: 'id', type: 'input'},
+    {message: 'What is the email address ?',name: 'email_address', type: 'input'},
+    {message: 'What is the school name ?',name: 'role_specific', type: 'input'},
+];
+
+const questionnaireManager = [
+    {message: 'What is the name ?',name: 'name', type: 'input'},
+    {message: 'What is the id ?',name: 'id', type: 'input'},
+    {message: 'What is the email address ?',name: 'email_address', type: 'input'},
+    {message: 'What is the office number ?',name: 'role_specific', type: 'input'},
+];
+
+function writeToFile(fileName, htmlData) {
+    // Check if file exist !
+
+    fs.appendFile(fileName, htmlData + '\n\n', function(err) {
+        if (err) {
+            console.log(err);
+            }
+    });
+    console.log(`Successfully Wrote to file at ${fileName}`);
+}
+
+
+function renderAndWrite() {
+    let htmlData = render(employees);
+    if (fs.existsSync("./output/team.html")) {
+        console.log("File already exist");
+        fs.unlinkSync("./output/team.html");
+    }
+    else {
+        fs.mkdir("./output", function(err) {
+            if (err) {
+                if (err.code === "EEXIST") {
+                return;
+                }
+            }
+            else {
+            console.log("New directory successfully created.")
+            }
+        })
+    }
+    writeToFile('./output/team.html', htmlData);
+}
+
+function init() {
+    inquirer
+    .prompt(roleChoice)
+    .then(function(response) {
+        switch(response.role) {
+            case 'Engineer':
+                questions = questionnaireEng;
+                func = Engineer;
+                break;
+            case 'Intern':
+                questions = questionnaireIntern;
+                func = Intern;
+                break;
+            case 'Manager':
+                questions = questionnaireManager;
+                func = Manager;
+                break;
+            case 'Done':
+                renderAndWrite();
+                return;
+            case 'Exit Program':
+                return;
+            default:
+                break;
+        }
+        
+    inquirer
+    .prompt(questions)
+    .then(function(response) {
+
+        //Markdown called
+        
+        let employeeObj = new func(response.name, response.id, response.email_address, response.role_specific);
+        employees.push(employeeObj);
+        init();
+        });
+        });
+}
+
+init();
 
 
 // Write code to use inquirer to gather information about the development team members,
