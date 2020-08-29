@@ -48,7 +48,10 @@
 
 ## Contributing
 
- 1. Clone the development branch to your local repository 'git clone git@github.com:Toogii2019/team_profile_generator.git'. 2. Make Change 3. Test the code (See test section of this README) 4. Push your change to a repo. 5. Create merge request
+ 1. Clone the development branch to your local repository 'git clone git@github.com:Toogii2019/team_profile_generator.git'. 
+ 2. Make Change 
+ 3. Test the code (See test section of this README) 
+ 4. Push your change to a repo. 5. Create merge request
 
 
 ## Tests
